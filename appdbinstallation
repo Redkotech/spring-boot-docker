@@ -1,3 +1,5 @@
-docker run -d -p 3000:8080 --name springapp --network doxa -e MONGO_DB_HOSTNAME=mymongo -e MONGO_INITDB_ROOT_USERNAME=devdb -e MONGO_INITDB_ROOT_PASSWORD=mon>
+docker rm -f $(docker ps -aq)
+docker rmi -f $(docker images -aq)
+docker run -d -p 8000:8080 --name springapp --network doxa -e MONGO_DB_HOSTNAME=mymongo -e MONGO_DB_USERNAME=devdb -e MONGO_DB_PASSWORD=mongo mylandmarktech/>
 
 docker run -d  --name mymongo --network doxa -e MONGO_INITDB_ROOT_USERNAME=devdb -e MONGO_INITDB_ROOT_PASSWORD=mongo mongo
