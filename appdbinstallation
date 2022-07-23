@@ -1,5 +1,11 @@
 docker rm -f $(docker ps -aq)
 docker rmi -f $(docker images -aq)
-docker run -d -p 8000:8080 --name springapp --network doxa -e MONGO_DB_HOSTNAME=mymongo -e MONGO_DB_USERNAME=devdb -e MONGO_DB_PASSWORD=mongo mylandmarktech/>
 
+//How to mount BINDMOUNT volume to a container AND  Create & connect app and database container
+
+docker run -d -p 8000:8080 --name springapp -v /home/ubuntu/data:/data/db --network doxa -e MONGO_DB_HOSTNAME=mymongo -e MONGO_DB_USERNAME=devdb -e MONGO_DB_PASSWORD=mongo mylandmarktech/>
+docker run -d  --name mymongo --network doxa -e MONGO_INITDB_ROOT_USERNAME=devdb -e MONGO_INITDB_ROOT_PASSWORD=mongo mongo
+
+//How to mount PERSISTENT VOLUME to a container and how to Create & connect app and database container
+docker run -d -p 8000:8080 --name springapp -v <name of volume created>:/data/db --network doxa -e MONGO_DB_HOSTNAME=mymongo -e MONGO_DB_USERNAME=devdb -e MONGO_DB_PASSWORD=mongo mylandmarktech/>
 docker run -d  --name mymongo --network doxa -e MONGO_INITDB_ROOT_USERNAME=devdb -e MONGO_INITDB_ROOT_PASSWORD=mongo mongo
