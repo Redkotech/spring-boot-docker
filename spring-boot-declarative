@@ -1,0 +1,73 @@
+pipeline{
+  agent any 
+  tools{
+    maven "maven"
+  }
+  stages{
+    stage('GitClone'){
+      steps{
+        echo "cloning the lastest applications version"
+        git credentialsId: 'Github-credentials', url: 'https://github.com/Redkotech/spring-boot-docker.git'
+      }
+    }
+      stage('Test+Build'){
+      steps{
+        sh "echo Running unitTesting"
+        sh "mvn clean package"
+        echo "echo test successful and backupArtifacts created"
+      }
+    }
+      stage('codeQuality'){
+      steps{
+        sh "mvn sonar:sonar"
+        sh "echo Running detail code analysis"
+        sh  "echo All conditions met/passed"
+      }
+    }
+      stage('upLoadArtifacts'){
+      steps{
+        sh "echo Running detail code analysis"
+        sh "mvn deploy"
+        sh "echo backupArtifacts in nexus"
+      }
+    }
+      stage('predeployment'){
+      steps{
+        sh "docker build -t dox2410/spring-boot-mongo:2 . "
+        sh "docker push dox2410/spring-boot-mongo:2"
+        sh "echo creating docker image"
+}
+    }
+    stage('UnDeploy'){
+      steps{
+        sh "echo UNDEPLOYING existing application"
+        sh "docker rm -f spring-boot-mongo:2 "
+        //sh "docker network create eko"
+      }
+    }
+    stage('deployment'){
+      steps{
+          //sh "sudo apt  install docker-compose -y"
+          //sh "docker-compose up -d"
+          //sh "docker stack deploy --compose-file docker-compose.yml mongodb"
+       sh "docker run -d -p 800:8080 --name myspring --network eko -e MONGO_DB_USERNAME=mongo -e MONGO_DB_PASSWORD=mymogo123 -e MONGO_DB_HOSTNAME=mongodb dox2410/spring-boot-mongo:2"
+       sh "docker run -d --name mongodb --network eko -e MONGO_INITDB_ROOT_USERNAME=mongo -e MONGO_INITDB_ROOT_PASSWORD=mymogo123 -v /tmp/data:/data/db mongo"
+       //sh "kubectl apply -f springBootMongo.yml" //this is when you ve your kops-k8s cluster set-up
+       sh "echo application ready for deployment"
+      }
+    }
+    stage('6Approval'){
+        steps{
+        timeout(time:9, unit:'HOURS') {
+            input message: 'Application ready for deployment, Please review and approve'
+    }
+   }
+  }
+  stage('emailNotification'){
+    steps{
+      sh "echo deployment successful"
+    }
+  }
+
+  }
+}
