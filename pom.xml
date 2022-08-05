@@ -83,6 +83,21 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+	
+       <distributionManagement>
+	    <repository>
+	      <id>nexus</id>
+	      <name>Landmark Technologies Releases Nexus Repository</name>
+	      <url>http://3.80.108.37:8081/repository/spring-mongo-release/</url>
+	    </repository>
+	    
+	    <snapshotRepository>
+	      <id>nexus</id>
+	      <name>Landmark Technologies Snapshot Nexus Repository </name>
+	      <url>http://3.80.108.37:8081/repository/spring-mongo/</url>
+	    </snapshotRepository>
+	    
+	</distributionManagement>	
 	<build>
 		<plugins>
 			<plugin>
