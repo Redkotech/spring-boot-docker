@@ -38,7 +38,7 @@ services:
     
 volumes:
   mongodb:
-    local: true
+    external: true
     
 networks:
   eko-network:
