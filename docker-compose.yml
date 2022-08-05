@@ -3,7 +3,7 @@ version: '3.1'
 services:
   springapp:
     image: dox2410/spring-boot-mongo:2
-    restart: always # This will be ignored if we deploy in docker swarm
+    #restart: always # This will be ignored if we deploy in docker swarm
     environment:
     - MONGO_DB_HOSTNAME=mongodb
     - MONGO_DB_USERNAME=mymongo
@@ -14,9 +14,9 @@ services:
     depends_on:
       - mongo
     networks:
-    - eko-network  
-    deploy:  # This will be considered only in docker swarm.
-      replicas: 2
+    - eko  
+    #deploy:  # This will be considered only in docker swarm.
+     # replicas: 2
       update_config:
         parallelism: 1
         delay: 20s
@@ -34,7 +34,7 @@ services:
       - /tmp/mongodb:/data/db
     restart: always
     networks:
-    - eko-network
+    - eko
     
 volumes:
   mongodb:
